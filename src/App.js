@@ -465,7 +465,7 @@ export default function App() {
               <h3>{t.menu[optionsFor.id]}</h3>
             </div>
             <img className="options-menu-photo" src={getMenuImageUrl(optionsFor)} alt={t.menu[optionsFor.id]} onError={(e) => { e.currentTarget.style.display = "none"; }} />
-            <p className="options-menu-detail">{{ko:`기본 가격 ${optionsFor.price.toLocaleString()}원 · 옵션을 선택하면 가격이 바뀝니다.`,en:`Base price: ₩${optionsFor.price.toLocaleString()}. Price changes with options.`,zh:`基础价格：₩${optionsFor.price.toLocaleString()}。选择选项后价格会变化。`,ja:`基本価格：₩${optionsFor.price.toLocaleString()}。オプションにより価格が変わります。`,vi:`Giá cơ bản: ₩${optionsFor.price.toLocaleString()}. Giá sẽ thay đổi theo tùy chọn.`}[kioskLang] || `기본 가격 ${optionsFor.price.toLocaleString()}원 · 옵션을 선택하면 가격이 바뀝니다.`)}</p>
+            <p className="options-menu-detail">{{ko:"기본 가격",en:"Base price",zh:"基础价格",ja:"基本価格",vi:"Giá cơ bản"}[kioskLang] || "기본 가격"}: ₩{optionsFor.price.toLocaleString()} · {{ko:"옵션을 선택하면 가격이 바뀝니다.",en:"Price changes with options.",zh:"选择选项后价格会变化。",ja:"オプションにより価格が変わります。",vi:"Giá thay đổi theo tùy chọn."}[kioskLang] || "옵션을 선택하면 가격이 바뀝니다."}</p>
 
             {isHotIceAvailable && (
               <div className="options-group">
