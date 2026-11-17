@@ -183,7 +183,7 @@ export default function App() {
         <p className="subtitle">{t.subtitle}</p>
         <form
           role="search"
-          aria-label="메뉴 검색"
+          aria-label={({ko:"메뉴 검색",en:"Menu search",zh:"菜单搜索",ja:"メニュー検索",vi:"Tìm kiếm thực đơn"}[kioskLang] || "메뉴 검색")}
           onSubmit={(e) => {
             e.preventDefault();
             const results = document.getElementById("menu-search-results");
@@ -208,14 +208,14 @@ export default function App() {
           }}
         >
           <label htmlFor="menu-search-input" style={{ width: "100%", color: "#111827", fontSize: "22px", fontWeight: 900 }}>
-            🔎 메뉴 검색 — 메뉴 이름을 입력하세요
+            🔎 {({ko:"메뉴 검색 — 메뉴 이름을 입력하세요",en:"Menu search — enter a menu name",zh:"菜单搜索 — 输入菜单名称",ja:"メニュー検索 — メニュー名を入力してください",vi:"Tìm món — nhập tên món ăn"}[kioskLang] || "메뉴 검색 — 메뉴 이름을 입력하세요")}
           </label>
           <input
             id="menu-search-input"
             type="search"
             value={menuSearch}
             onChange={(e) => setMenuSearch(e.target.value)}
-            placeholder="와퍼, 불고기버거, 콜라 등"
+            placeholder={({ko:"와퍼, 불고기버거, 콜라 등",en:"Whopper, bulgogi burger, cola, etc.",zh:"皇堡、韩式烤肉汉堡、可乐等",ja:"ワッパー、プルコギバーガー、コーラなど",vi:"Whopper, burger Bulgogi, cola, v.v."}[kioskLang] || "와퍼, 불고기버거, 콜라 등")}
             autoComplete="off"
             style={{
               flex: "1 1 220px",
@@ -235,12 +235,12 @@ export default function App() {
             minHeight: "62px", padding: "12px 28px", border: "3px solid #111827",
             borderRadius: "10px", background: "#111827", color: "#ffffff",
             fontSize: "20px", fontWeight: 900, cursor: "pointer",
-          }}>검색</button>
+          }}>{({ko:"검색",en:"Search",zh:"搜索",ja:"検索",vi:"Tìm kiếm"}[kioskLang] || "검색")}</button>
           <button type="button" onClick={() => setMenuSearch("")} style={{
             minHeight: "62px", padding: "12px 20px", border: "3px solid #374151",
             borderRadius: "10px", background: "#ffffff", color: "#111827",
             fontSize: "18px", fontWeight: 900, cursor: "pointer",
-          }}>전체 메뉴</button>
+          }}>{({ko:"전체 메뉴",en:"All menus",zh:"全部菜单",ja:"すべてのメニュー",vi:"Tất cả món"}[kioskLang] || "전체 메뉴")}</button>
         </form>
         <section aria-label="언어 선택" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "12px", width: "100%", margin: "16px auto", padding: "14px", boxSizing: "border-box", border: "2px solid #64748b", borderRadius: "14px", background: highContrast ? "#000000" : "#f1f5f9" }}>
           <label htmlFor="kiosk-language-select" style={{ fontSize: "20px", fontWeight: 900, color: highContrast ? "#ffffff" : "#111827" }}>
