@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { CATEGORIES, CATEGORY_LABELS, MENU, WHIP_AVAILABLE_IDS, FIXED_ICE_IDS, DEFAULT_OPTIONS, getQrImageUrl, getMenuImageUrl, computeUnitPrice, buildOptionSummary, format } from "./data/menu";
+import { CATEGORIES, CATEGORY_LABELS, MENU, FIXED_ICE_IDS, DEFAULT_OPTIONS, getQrImageUrl, getMenuImageUrl, computeUnitPrice, buildOptionSummary, format } from "./data/menu";
 import { useKioskConnection, socket } from "./hooks/useKioskConnection";
 import { useCart } from "./hooks/useCart";
 
@@ -10,6 +10,7 @@ const FALLBACK_LOADING_TEXT = "Loading...";
 export default function App() {
   const {
     t,
+    kioskLang,
     largeText,
     highContrast,
     easyMode,
@@ -131,7 +132,6 @@ export default function App() {
     );
   }
 
-  const isWhipAvailable = optionsFor ? WHIP_AVAILABLE_IDS.includes(optionsFor.id) : false;
   const isHotIceAvailable = optionsFor ? !FIXED_ICE_IDS.includes(optionsFor.id) : false;
 
   return (
