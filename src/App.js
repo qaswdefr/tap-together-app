@@ -263,7 +263,7 @@ export default function App() {
         </section>
 
         <section
-          aria-label="접근성 설정"
+          aria-label={({ko:"접근성 설정",en:"Accessibility settings",zh:"无障碍设置",ja:"アクセシビリティ設定",vi:"Cài đặt trợ năng"}[kioskLang] || "접근성 설정")}
           style={{
             display: "flex",
             flexWrap: "wrap",
@@ -280,7 +280,7 @@ export default function App() {
           }}
         >
           <strong style={{ width: "100%", textAlign: "center", fontSize: "18px", color: highContrast ? "#ffffff" : "#111827" }}>
-            접근성 설정
+            {({ko:"접근성 설정",en:"Accessibility settings",zh:"无障碍设置",ja:"アクセシビリティ設定",vi:"Cài đặt trợ năng"}[kioskLang] || "접근성 설정")}
           </strong>
           <button
             type="button"
@@ -533,12 +533,12 @@ export default function App() {
 
       {paymentStatus === "choosing-payment" && (
         <div className="payment-overlay">
-          <div className="dine-type-box" role="dialog" aria-modal="true" aria-label="결제 방법 선택">
-            <h3>결제 방법을 선택하세요</h3>
-            <p className="subtitle">실제 결제는 카드 단말기 또는 현금으로 진행해 주세요.</p>
+          <div className="dine-type-box" role="dialog" aria-modal="true" aria-label={({ko:"결제 방법 선택",en:"Choose a payment method",zh:"选择支付方式",ja:"お支払い方法を選択",vi:"Chọn phương thức thanh toán"}[kioskLang] || "결제 방법 선택")}>
+            <h3>{({ko:"결제 방법을 선택하세요",en:"Choose a payment method",zh:"请选择支付方式",ja:"お支払い方法を選択してください",vi:"Vui lòng chọn phương thức thanh toán"}[kioskLang] || "결제 방법을 선택하세요")}</h3>
+            <p className="subtitle">{({ko:"실제 결제는 카드 단말기 또는 현금으로 진행해 주세요.",en:"Complete the actual payment at the card terminal or with cash.",zh:"请使用刷卡终端或现金完成实际付款。",ja:"実際のお支払いはカード端末または現金で行ってください。",vi:"Vui lòng thanh toán thực tế bằng máy quẹt thẻ hoặc tiền mặt."}[kioskLang] || "실제 결제는 카드 단말기 또는 현금으로 진행해 주세요.")}</p>
             <div className="dine-type-choices">
-              <button className="dine-type-btn" onClick={() => choosePaymentMethod("cash")}>💵 현금</button>
-              <button className="dine-type-btn" onClick={() => choosePaymentMethod("card")}>💳 카드</button>
+              <button className="dine-type-btn" onClick={() => choosePaymentMethod("cash")}>💵 {({ko:"현금",en:"Cash",zh:"现金",ja:"現金",vi:"Tiền mặt"}[kioskLang] || "현금")}</button>
+              <button className="dine-type-btn" onClick={() => choosePaymentMethod("card")}>💳 {({ko:"카드",en:"Card",zh:"银行卡",ja:"カード",vi:"Thẻ"}[kioskLang] || "카드")}</button>
             </div>
           </div>
         </div>
