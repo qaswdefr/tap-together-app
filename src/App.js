@@ -163,22 +163,71 @@ export default function App() {
       <div className="kiosk-card wide">
         <h1>{t.kioskTitle}</h1>
         <p className="subtitle">{t.subtitle}</p>
-        <button
-          type="button"
-          className="large-text-toggle"
-          aria-pressed={largeText}
-          onClick={() => setLargeText((current) => !current)}
+        <section
+          aria-label="접근성 설정"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "12px",
+            width: "100%",
+            margin: "18px auto 22px",
+            padding: "14px",
+            boxSizing: "border-box",
+            border: "2px solid #64748b",
+            borderRadius: "14px",
+            background: highContrast ? "#000000" : "#f1f5f9",
+          }}
         >
-          {(LARGE_TEXT_LABELS[kioskLang] || LARGE_TEXT_LABELS.ko)[largeText ? "off" : "on"]}
-        </button>
-        <button
-          type="button"
-          className="contrast-toggle"
-          aria-pressed={highContrast}
-          onClick={() => setHighContrast((current) => !current)}
-        >
-          {(HIGH_CONTRAST_LABELS[kioskLang] || HIGH_CONTRAST_LABELS.ko)[highContrast ? "off" : "on"]}
-        </button>
+          <strong style={{ width: "100%", textAlign: "center", fontSize: "18px", color: highContrast ? "#ffffff" : "#111827" }}>
+            접근성 설정
+          </strong>
+          <button
+            type="button"
+            className="large-text-toggle"
+            aria-pressed={largeText}
+            onClick={() => setLargeText((current) => !current)}
+            style={{
+              display: "inline-flex",
+              visibility: "visible",
+              opacity: 1,
+              minHeight: "56px",
+              padding: "12px 20px",
+              border: "3px solid #111827",
+              borderRadius: "10px",
+              background: "#ffffff",
+              color: "#111827",
+              fontSize: "18px",
+              fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >
+            {(LARGE_TEXT_LABELS[kioskLang] || LARGE_TEXT_LABELS.ko)[largeText ? "off" : "on"]}
+          </button>
+          <button
+            type="button"
+            className="contrast-toggle"
+            aria-pressed={highContrast}
+            onClick={() => setHighContrast((current) => !current)}
+            style={{
+              display: "inline-flex",
+              visibility: "visible",
+              opacity: 1,
+              minHeight: "56px",
+              padding: "12px 20px",
+              border: "3px solid #111827",
+              borderRadius: "10px",
+              background: highContrast ? "#ffd400" : "#111827",
+              color: highContrast ? "#000000" : "#ffffff",
+              fontSize: "18px",
+              fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >
+            {(HIGH_CONTRAST_LABELS[kioskLang] || HIGH_CONTRAST_LABELS.ko)[highContrast ? "off" : "on"]}
+          </button>
+        </section>
 
         {/* 원격/공유 참가자가 붙어 있는 동안엔 항상 켜져 있는 표시등 —
             악용(누군가 몰래 연결) 방지를 위해 연결 여부를 화면에서 계속 알 수 있게 함.
