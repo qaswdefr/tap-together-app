@@ -371,6 +371,7 @@ export default function App() {
 
           <div className="cart-panel">
             <div className="cart-header">
+              {/* 주문 수량은 비어 있어도 0으로 표시 */}
               <h2>{t.cartTitle} <span className="cart-badge">{totalCount}</span></h2>
               {cart.length > 0 && <button className="clear-btn" onClick={clearCart}>{t.clearBtn}</button>}
             </div>
