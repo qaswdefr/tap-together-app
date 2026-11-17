@@ -261,6 +261,7 @@ export function useKioskConnection() {
     largeText,
     setLargeText,
     highContrast,
+    setHighContrast,
     easyMode,
     voiceGuideOn,
     hasDirect,
