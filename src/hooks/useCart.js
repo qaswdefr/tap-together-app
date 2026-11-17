@@ -25,6 +25,7 @@ export function useCart({ t, notify, finishAndResetKiosk, kioskCodeRef }) {
   const [cart, setCart] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState("idle");
   const [orderNumber, setOrderNumber] = useState(null);
+  const [orderDetails, setOrderDetails] = useState(null);
   const [pendingRemoteDineType, setPendingRemoteDineType] = useState(null);
 
   const orderCounterRef = useRef(loadOrderCounter());
@@ -118,7 +119,21 @@ export function useCart({ t, notify, finishAndResetKiosk, kioskCodeRef }) {
     notify(t.dineTypeTitle);
   };
 
-  const startPayment = () => {
+  const chooseDineType = (dineType) => {
+    setPendingRemoteDineType(dineType);
+    setPaymentStatus("choosing-payment");
+  };
+
+  const startPayment = (paymentMethod, dineType) => {
+    if (!["cash", "card"].includes(paymentMethod) || cart.length === 0) return;
+    const orderSnapshot = {
+      items: cart.map((item) => ({ ...item, options: { ...item.options } })),
+      totalPrice,
+      totalCount,
+      paymentMethod,
+      dineType: dineType || pendingRemoteDineType || "takeout",
+      createdAt: new Date().toISOString(),
+    };
     setPaymentStatus("processing");
     notify(t.processingLabel);
 
@@ -126,16 +141,25 @@ export function useCart({ t, notify, finishAndResetKiosk, kioskCodeRef }) {
       const num = orderCounterRef.current;
       orderCounterRef.current += 1;
       saveOrderCounter(orderCounterRef.current);
+      const completedOrder = { ...orderSnapshot, orderNumber: num };
       setOrderNumber(num);
+      setOrderDetails(completedOrder);
+      try {
+        localStorage.setItem("kiosk-last-order", JSON.stringify(completedOrder));
+      } catch (err) {
+        // 브라우저 저장 공간이 없으면 완료 화면만 표시
+      }
       setPaymentStatus("done");
+      setPendingRemoteDineType(null);
       notify(`${t.doneLabel} ${t.orderNumberLabel.replace("{n}", num)}`);
 
       setTimeout(() => {
         setCart([]);
         setPaymentStatus("idle");
         setOrderNumber(null);
+        setOrderDetails(null);
         finishAndResetKiosk();
-      }, 3000);
+      }, 7000);
     }, 1500);
   };
 
@@ -150,25 +174,8 @@ export function useCart({ t, notify, finishAndResetKiosk, kioskCodeRef }) {
   };
 
   const approveRemoteCheckout = () => {
-    setPaymentStatus("processing");
-    notify(t.processingLabel);
-
-    setTimeout(() => {
-      const num = orderCounterRef.current;
-      orderCounterRef.current += 1;
-      saveOrderCounter(orderCounterRef.current);
-      setOrderNumber(num);
-      setPaymentStatus("done");
-      setPendingRemoteDineType(null);
-      notify(`${t.doneLabel} ${t.orderNumberLabel.replace("{n}", num)}`);
-
-      setTimeout(() => {
-        setCart([]);
-        setPaymentStatus("idle");
-        setOrderNumber(null);
-        finishAndResetKiosk();
-      }, 3000);
-    }, 1500);
+    setPaymentStatus("choosing-payment");
+    notify("결제 방법을 선택해 주세요");
   };
 
   const declineRemoteCheckout = () => {
@@ -184,7 +191,9 @@ export function useCart({ t, notify, finishAndResetKiosk, kioskCodeRef }) {
     cart,
     paymentStatus,
     orderNumber,
+    orderDetails,
     pendingRemoteDineType,
+    chooseDineType,
     addItemToCart,
     changeQty,
     removeItem,
