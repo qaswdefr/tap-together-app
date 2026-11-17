@@ -83,4 +83,4 @@ export const buildOptionSummary = (t, options) =>
   options.size === "large" ? t.sizeLarge.replace(/\s*\(.*\)/, "") : "";
 
 export const format = (template, vars) =>
-  (template || "").replace(/\{(\\w+)\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : ""));
+  (template || "").replace(/\{(\w+)\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : ""));
