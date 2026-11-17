@@ -837,3 +837,58 @@ body {
 @media (max-width: 700px) {
   .contrast-toggle { margin-left: 0; }
 }
+
+
+/* 고대비 모드 전역 보정: 페이지 바깥 배경과 모든 주요 패널까지 확실히 대비 */
+html.high-contrast-mode,
+body.high-contrast-mode,
+body.high-contrast-mode #root {
+  min-height: 100%;
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+body.high-contrast-mode .kiosk {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+body.high-contrast-mode .kiosk .kiosk-card,
+body.high-contrast-mode .kiosk .code-box,
+body.high-contrast-mode .kiosk .cart-panel,
+body.high-contrast-mode .kiosk .cart-item,
+body.high-contrast-mode .kiosk .options-box,
+body.high-contrast-mode .kiosk .dine-type-box,
+body.high-contrast-mode .kiosk .payment-box {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+body.high-contrast-mode .kiosk h1,
+body.high-contrast-mode .kiosk h2,
+body.high-contrast-mode .kiosk h3,
+body.high-contrast-mode .kiosk p,
+body.high-contrast-mode .kiosk span,
+body.high-contrast-mode .kiosk li,
+body.high-contrast-mode .kiosk label {
+  color: #ffffff;
+}
+body.high-contrast-mode .kiosk .menu-price,
+body.high-contrast-mode .kiosk .total-price,
+body.high-contrast-mode .kiosk .options-price-row {
+  color: #ffd400 !important;
+}
+body.high-contrast-mode .kiosk button {
+  border: 2px solid #ffffff;
+}
+body.high-contrast-mode .kiosk .checkout-btn,
+body.high-contrast-mode .kiosk .tab.active,
+body.high-contrast-mode .kiosk .option-choice.selected {
+  background: #ffd400 !important;
+  color: #000000 !important;
+  border-color: #ffd400 !important;
+}
+body.high-contrast-mode .kiosk button:focus-visible {
+  outline: 4px solid #00e5ff !important;
+  outline-offset: 4px;
+}
