@@ -22,6 +22,7 @@ const formatCurrency = (amountKRW, language) => {
   return new Intl.NumberFormat(config.locale, {
     style: "currency",
     currency: config.currency,
+    currencyDisplay: "code",
     minimumFractionDigits: config.digits,
     maximumFractionDigits: config.digits,
   }).format(Math.round(amountKRW * config.rate * (10 ** config.digits)) / (10 ** config.digits));
