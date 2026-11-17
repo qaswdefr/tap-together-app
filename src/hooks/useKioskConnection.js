@@ -259,6 +259,7 @@ export function useKioskConnection() {
     kioskLang,
     kioskLangRef,
     largeText,
+    setLargeText,
     highContrast,
     easyMode,
     voiceGuideOn,
