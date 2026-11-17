@@ -7,6 +7,26 @@ import { useCart } from "./hooks/useCart";
 const REMOTE_SITE_URL = process.env.REACT_APP_REMOTE_SITE_URL || "http://localhost:3000";
 const FALLBACK_LOADING_TEXT = "Loading...";
 
+// 메뉴 기본 가격은 KRW로 저장하고, 화면에는 선택 언어에 맞는 통화로 환산해 표시합니다.
+// 기준 환율(2026-11-17 참고): USD 1,336.60원, CNY 200.51원,
+// JPY 100엔 840.31원, VND는 USD/VND 및 USD/KRW 교차환율 기준.
+const CURRENCY_BY_LANGUAGE = {
+  ko: { locale: "ko-KR", currency: "KRW", rate: 1, digits: 0 },
+  en: { locale: "en-US", currency: "USD", rate: 1 / 1336.6, digits: 2 },
+  zh: { locale: "zh-CN", currency: "CNY", rate: 1 / 200.51, digits: 2 },
+  ja: { locale: "ja-JP", currency: "JPY", rate: 100 / 840.31, digits: 0 },
+  vi: { locale: "vi-VN", currency: "VND", rate: 25712.5 / 1336.6, digits: 0 },
+};
+const formatCurrency = (amountKRW, language) => {
+  const config = CURRENCY_BY_LANGUAGE[language] || CURRENCY_BY_LANGUAGE.ko;
+  return new Intl.NumberFormat(config.locale, {
+    style: "currency",
+    currency: config.currency,
+    minimumFractionDigits: config.digits,
+    maximumFractionDigits: config.digits,
+  }).format(Math.round(amountKRW * config.rate * (10 ** config.digits)) / (10 ** config.digits));
+};
+
 const LARGE_TEXT_LABELS = {
   ko: { on: "🔠 큰 글씨 켜기", off: "🔠 큰 글씨 끄기" },
   en: { on: "🔠 Turn on large text", off: "🔠 Turn off large text" },
@@ -403,7 +423,7 @@ export default function App() {
                     <span className="menu-photo-fallback" style={{ display: "none" }}>{item.icon}</span>
                   </span>
                   <span className="menu-name">{t.menu[item.id]}</span>
-                  <span className="menu-price">{item.price.toLocaleString()}원~</span>
+                  <span className="menu-price">{formatCurrency(item.price, kioskLang)}</span>
                 </button>
               ))}
             </div>
@@ -430,7 +450,7 @@ export default function App() {
                         <div>
                           <p className="cart-item-name">{t.menu[c.id]}</p>
                           {summary && <p className="cart-item-options">{summary}</p>}
-                          <p className="cart-item-price">{c.unitPrice.toLocaleString()}원</p>
+                          <p className="cart-item-price">{formatCurrency(c.unitPrice, kioskLang)}</p>
                         </div>
                       </div>
                       <div className="cart-item-actions">
@@ -450,7 +470,7 @@ export default function App() {
             <div className="cart-footer">
               <div className="total-row">
                 <span>{format(t.totalCountLabel, { n: totalCount })}</span>
-                <span className="total-price">{totalPrice.toLocaleString()}원</span>
+                <span className="total-price">{formatCurrency(totalPrice, kioskLang)}</span>
               </div>
               <button className="checkout-btn" onClick={handleCheckoutClick} disabled={cart.length === 0}>
                 {t.checkoutBtn}
@@ -475,7 +495,7 @@ export default function App() {
               <h3>{t.menu[optionsFor.id]}</h3>
             </div>
             <img className="options-menu-photo" src={getMenuImageUrl(optionsFor)} alt={t.menu[optionsFor.id]} onError={(e) => { e.currentTarget.style.display = "none"; }} />
-            <p className="options-menu-detail">{{ko:"기본 가격",en:"Base price",zh:"基础价格",ja:"基本価格",vi:"Giá cơ bản"}[kioskLang] || "기본 가격"}: ₩{optionsFor.price.toLocaleString()} · {{ko:"옵션을 선택하면 가격이 바뀝니다.",en:"Price changes with options.",zh:"选择选项后价格会变化。",ja:"オプションにより価格が変わります。",vi:"Giá thay đổi theo tùy chọn."}[kioskLang] || "옵션을 선택하면 가격이 바뀝니다."}</p>
+            <p className="options-menu-detail">{{ko:"기본 가격",en:"Base price",zh:"基础价格",ja:"基本価格",vi:"Giá cơ bản"}[kioskLang] || "기본 가격"}: {formatCurrency(optionsFor.price, kioskLang)} · {{ko:"옵션을 선택하면 가격이 바뀝니다.",en:"Price changes with options.",zh:"选择选项后价格会变化。",ja:"オプションにより価格が変わります。",vi:"Giá thay đổi theo tùy chọn."}[kioskLang] || "옵션을 선택하면 가격이 바뀝니다."}</p>
 
             {isHotIceAvailable && (
               <div className="options-group">
@@ -521,7 +541,7 @@ export default function App() {
             
 
             <div className="options-price-row">
-              <span>{computeUnitPrice(optionsFor, draftOptions).toLocaleString()}원</span>
+              <span>{formatCurrency(computeUnitPrice(optionsFor, draftOptions), kioskLang)}</span>
             </div>
 
             <button className="checkout-btn" onClick={confirmAddToCart}>{t.addToCartBtn}</button>
@@ -596,7 +616,7 @@ export default function App() {
               <div className="completed-order-details">
                 <p>{receiptText.dine}: {orderDetails.dineType === "dine-in" ? receiptText.dineIn : receiptText.takeout}</p>
                 <p>{receiptText.payment}: {orderDetails.paymentMethod === "card" ? receiptText.card : receiptText.cash}</p>
-                <p>{receiptText.total}: ₩{orderDetails.totalPrice.toLocaleString()}</p>
+                <p>{receiptText.total}: {formatCurrency(orderDetails.totalPrice, receiptLang)}</p>
                 <ul>
                   {orderDetails.items.map((item) => {
                     const menuItem = MENU.find((menu) => menu.id === item.id);
