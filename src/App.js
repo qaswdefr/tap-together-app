@@ -371,7 +371,7 @@ export default function App() {
 
           <div className="cart-panel">
             <div className="cart-header">
-              <h2>{t.cartTitle} {totalCount > 0 && <span className="cart-badge">{totalCount}</span>}</h2>
+              <h2>{t.cartTitle} <span className="cart-badge">{totalCount}</span></h2>
               {cart.length > 0 && <button className="clear-btn" onClick={clearCart}>{t.clearBtn}</button>}
             </div>
 
