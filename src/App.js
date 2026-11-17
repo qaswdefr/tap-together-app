@@ -118,11 +118,22 @@ export default function App() {
   const normalizedSearch = menuSearch.trim().toLocaleLowerCase();
   const filteredMenu = MENU.filter((item) => {
     if (normalizedSearch) {
-      const name = String(t.menu[item.id] || "").toLocaleLowerCase();
-      return name.includes(normalizedSearch) || item.id.toLocaleLowerCase().includes(normalizedSearch);
+      const searchableNames = [
+        t?.menu?.[item.id],
+        ...Object.values(item.names || {}),
+        item.id,
+      ].filter(Boolean).map((name) => String(name).toLocaleLowerCase());
+      return searchableNames.some((name) => name.includes(normalizedSearch));
     }
     return item.category === activeCategory;
   });
+  const searchResultText = {
+    ko: filteredMenu.length ? `${filteredMenu.length}개의 메뉴를 찾았습니다. 메뉴를 누르면 옵션을 고르고 장바구니에 담을 수 있습니다.` : "검색 결과가 없습니다. 메뉴 이름을 다시 확인해 주세요.",
+    en: filteredMenu.length ? `${filteredMenu.length} menu(s) found. Select a menu to choose options and add it to your cart.` : "No results found. Please check the menu name and try again.",
+    zh: filteredMenu.length ? `找到 ${filteredMenu.length} 个菜单。点击菜单选择选项并加入购物车。` : "没有找到菜单，请检查名称后重试。",
+    ja: filteredMenu.length ? `${filteredMenu.length}件のメニューが見つかりました。メニューを選択してオプションを選び、カートに追加できます。` : "検索結果がありません。メニュー名を確認してください。",
+    vi: filteredMenu.length ? `Tìm thấy ${filteredMenu.length} món. Chọn món để tùy chỉnh và thêm vào giỏ hàng.` : "Không tìm thấy món. Vui lòng kiểm tra lại tên món.",
+  }[kioskLang] || "검색 결과가 없습니다.";
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
@@ -352,7 +363,7 @@ export default function App() {
 
         <div className="layout">
           <div className="menu-section">
-{normalizedSearch && <p id="menu-search-results" role="status" style={{ margin: "0 0 12px", padding: "12px", borderRadius: "10px", background: "#fff7ed", color: "#111827", fontWeight: 800 }}>{filteredMenu.length ? filteredMenu.length + "개의 메뉴를 찾았습니다. 메뉴를 누르면 옵션을 고르고 장바구니에 담을 수 있습니다." : "검색 결과가 없습니다. 메뉴 이름을 다시 확인해 주세요."}</p>}
+{normalizedSearch && <p id="menu-search-results" role="status" style={{ margin: "0 0 12px", padding: "12px", borderRadius: "10px", background: "#fff7ed", color: "#111827", fontWeight: 800 }}>{searchResultText}</p>}
             {!normalizedSearch && <div className="tabs">
               {CATEGORIES.map((cat) => (
                 <button
