@@ -297,7 +297,7 @@ export default function App() {
               </div>
             )}
 
-            {optionsFor.category === "drink" && (<div className="options-group">
+            {(<div className="options-group">
               <p className="options-group-label">{t.sizeLabel}</p>
               <div className="options-choice-row">
                 <button
