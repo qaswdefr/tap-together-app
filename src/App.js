@@ -427,6 +427,7 @@ export default function App() {
             <p className="order-number">{format(t.orderNumberLabel, { n: orderNumber })}</p>
             {orderDetails && (
               <div className="completed-order-details">
+                <p>이용 방법: {orderDetails.dineType === "dine-in" ? "매장 식사" : "포장"}</p>
                 <p>결제 방법: {orderDetails.paymentMethod === "card" ? "카드" : "현금"}</p>
                 <p>주문 금액: {orderDetails.totalPrice.toLocaleString()}원</p>
                 <ul>
