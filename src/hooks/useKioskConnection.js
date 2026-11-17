@@ -257,6 +257,7 @@ export function useKioskConnection() {
   return {
     t,
     kioskLang,
+    setKioskLang,
     kioskLangRef,
     largeText,
     setLargeText,
