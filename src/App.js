@@ -28,7 +28,9 @@ export default function App() {
     cart,
     paymentStatus,
     orderNumber,
+    orderDetails,
     pendingRemoteDineType,
+    chooseDineType,
     addItemToCart,
     changeQty,
     removeItem,
@@ -107,6 +109,8 @@ export default function App() {
     addItemToCart(optionsFor, draftOptions);
     closeOptions();
   };
+
+  const choosePaymentMethod = (method) => startPayment(method, pendingRemoteDineType);
 
   // GitHub Pages는 /123456 같은 경로 새로고침이 404라서 코드를 ?code= 쿼리로 넘김
   const qrValue = kioskCode ? `${REMOTE_SITE_URL.replace(/\/+$/, "")}/?code=${kioskCode}` : "";
@@ -187,21 +191,17 @@ export default function App() {
             <div className="menu-grid">
               {filteredMenu.map((item) => (
                 <button key={item.id} className={`menu-item ${easyMode ? "easy" : ""}`} onClick={() => openOptions(item)}>
-                  {easyMode ? (
-                    <span className="menu-photo-wrap">
-                      <img
-                        className="menu-photo"
-                        src={getMenuImageUrl(item)}
-                        alt={t.menu[item.id]}
-                        onError={(e) => {
-                          e.target.parentElement.style.display = "none";
-                          e.target.parentElement.nextSibling.style.display = "block";
-                        }}
-                      />
-                    </span>
-                  ) : null}
-                  <span className="menu-icon" style={easyMode ? { display: "none" } : undefined}>
-                    {item.icon}
+                  <span className="menu-photo-wrap">
+                    <img
+                      className="menu-photo"
+                      src={getMenuImageUrl(item)}
+                      alt={t.menu[item.id]}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "block";
+                      }}
+                    />
+                    <span className="menu-photo-fallback" style={{ display: "none" }}>{item.icon}</span>
                   </span>
                   <span className="menu-name">{t.menu[item.id]}</span>
                   <span className="menu-price">{item.price.toLocaleString()}원~</span>
@@ -274,6 +274,8 @@ export default function App() {
               <span className="options-icon">{optionsFor.icon}</span>
               <h3>{t.menu[optionsFor.id]}</h3>
             </div>
+            <img className="options-menu-photo" src={getMenuImageUrl(optionsFor)} alt={t.menu[optionsFor.id]} onError={(e) => { e.currentTarget.style.display = "none"; }} />
+            <p className="options-menu-detail">기본 가격 {optionsFor.price.toLocaleString()}원 · 옵션을 선택하면 가격이 바뀝니다.</p>
 
             {isHotIceAvailable && (
               <div className="options-group">
@@ -365,8 +367,21 @@ export default function App() {
           <div className="dine-type-box" role="dialog" aria-modal="true" aria-label={t.dineTypeTitle}>
             <h3>{t.dineTypeTitle}</h3>
             <div className="dine-type-choices">
-              <button className="dine-type-btn" onClick={() => { notify(t.dineIn); startPayment(); }}>🍽️ {t.dineIn}</button>
-              <button className="dine-type-btn" onClick={() => { notify(t.takeout); startPayment(); }}>🥤 {t.takeout}</button>
+              <button className="dine-type-btn" onClick={() => { notify(t.dineIn); chooseDineType("dine-in"); }}>🍽️ {t.dineIn}</button>
+              <button className="dine-type-btn" onClick={() => { notify(t.takeout); chooseDineType("takeout"); }}>🥤 {t.takeout}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {paymentStatus === "choosing-payment" && (
+        <div className="payment-overlay">
+          <div className="dine-type-box" role="dialog" aria-modal="true" aria-label="결제 방법 선택">
+            <h3>결제 방법을 선택하세요</h3>
+            <p className="subtitle">실제 결제는 카드 단말기 또는 현금으로 진행해 주세요.</p>
+            <div className="dine-type-choices">
+              <button className="dine-type-btn" onClick={() => choosePaymentMethod("cash")}>💵 현금</button>
+              <button className="dine-type-btn" onClick={() => choosePaymentMethod("card")}>💳 카드</button>
             </div>
           </div>
         </div>
@@ -410,6 +425,18 @@ export default function App() {
             <span className="check-icon" aria-hidden="true">✅</span>
             <p className="success-title">{t.doneLabel}</p>
             <p className="order-number">{format(t.orderNumberLabel, { n: orderNumber })}</p>
+            {orderDetails && (
+              <div className="completed-order-details">
+                <p>이용 방법: {orderDetails.dineType === "dine-in" ? "매장 식사" : "포장"}</p>
+                <p>결제 방법: {orderDetails.paymentMethod === "card" ? "카드" : "현금"}</p>
+                <p>주문 금액: {orderDetails.totalPrice.toLocaleString()}원</p>
+                <ul>
+                  {orderDetails.items.map((item) => (
+                    <li key={item.cartId}>{t.menu[item.id]} × {item.qty}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       )}

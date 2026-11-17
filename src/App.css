@@ -720,3 +720,13 @@ body {
     padding-top: 40px;
   }
 }
+
+
+/* 메뉴 사진과 주문/결제 상세 */
+.menu-photo-fallback { display:block; font-size:34px; line-height:96px; text-align:center; }
+.options-menu-photo { display:block; width:100%; max-height:180px; object-fit:contain; border-radius:14px; margin:0 auto 10px; background:rgba(255,255,255,0.06); }
+.options-menu-detail { color:#d6b98c; font-size:13px; text-align:center; margin:0 0 16px; }
+.completed-order-details { margin-top:14px; text-align:left; font-size:13px; color:#fdf6ec; }
+.completed-order-details p { margin:5px 0; }
+.completed-order-details ul { margin:6px 0 0; padding-left:20px; }
+.kiosk.large .completed-order-details { font-size:22px; }
