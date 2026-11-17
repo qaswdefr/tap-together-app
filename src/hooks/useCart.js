@@ -21,7 +21,7 @@ const saveOrderCounter = (value) => {
   }
 };
 
-export function useCart({ t, notify, finishAndResetKiosk, kioskCodeRef }) {
+export function useCart({ t, notify, finishAndResetKiosk, kioskCodeRef, kioskLang }) {
   const [cart, setCart] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState("idle");
   const [orderNumber, setOrderNumber] = useState(null);
@@ -133,6 +133,7 @@ export function useCart({ t, notify, finishAndResetKiosk, kioskCodeRef }) {
       paymentMethod,
       dineType: dineType || pendingRemoteDineType || "takeout",
       createdAt: new Date().toISOString(),
+      language: kioskLang || "ko",
     };
     setPaymentStatus("processing");
     notify(t.processingLabel);
