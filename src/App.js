@@ -83,7 +83,7 @@ export default function App() {
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
-    notify(t.categories[cat]);
+    notify(CATEGORY_LABELS[cat]?.ko || cat);
   };
 
   const openOptions = (item) => {
