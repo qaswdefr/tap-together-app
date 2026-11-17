@@ -70,6 +70,7 @@ export default function App() {
   }, [highContrast]);
 
   const [activeCategory, setActiveCategory] = useState("burger");
+  const [menuSearch, setMenuSearch] = useState("");
   const [optionsFor, setOptionsFor] = useState(null);
   const [draftOptions, setDraftOptions] = useState(DEFAULT_OPTIONS);
 
@@ -104,7 +105,14 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart]);
 
-  const filteredMenu = MENU.filter((item) => item.category === activeCategory);
+  const normalizedSearch = menuSearch.trim().toLocaleLowerCase();
+  const filteredMenu = MENU.filter((item) => {
+    if (normalizedSearch) {
+      const name = String(t.menu[item.id] || "").toLocaleLowerCase();
+      return name.includes(normalizedSearch) || item.id.toLocaleLowerCase().includes(normalizedSearch);
+    }
+    return item.category === activeCategory;
+  });
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
@@ -264,7 +272,13 @@ export default function App() {
 
         <div className="layout">
           <div className="menu-section">
-            <div className="tabs">
+            <div className="menu-search" style={{ display: "flex", gap: "10px", alignItems: "center", margin: "0 0 16px", width: "100%" }}>
+              <label htmlFor="menu-search-input" style={{ fontWeight: 800, whiteSpace: "nowrap" }}>메뉴 검색</label>
+              <input id="menu-search-input" type="search" value={menuSearch} onChange={(e) => setMenuSearch(e.target.value)} placeholder="메뉴 이름을 입력하세요" autoComplete="off" style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: "10px 14px", border: "2px solid #64748b", borderRadius: "10px", fontSize: "16px", boxSizing: "border-box" }} />
+              {menuSearch && <button type="button" onClick={() => setMenuSearch("")} aria-label="검색어 지우기" style={{ minHeight: "48px", padding: "8px 14px", borderRadius: "10px", border: "2px solid #64748b", background: "#fff", color: "#111827", fontWeight: 700 }}>지우기</button>}
+            </div>
+            {normalizedSearch && <p role="status" style={{ margin: "0 0 12px", fontWeight: 700 }}>{filteredMenu.length ? filteredMenu.length + "개의 메뉴를 찾았습니다. 메뉴를 누르면 옵션을 고르고 장바구니에 담을 수 있습니다." : "검색 결과가 없습니다. 메뉴 이름을 다시 확인해 주세요."}</p>}
+            {!normalizedSearch && <div className="tabs">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat}
@@ -275,7 +289,7 @@ export default function App() {
                   {CATEGORY_LABELS[cat]?.[kioskLang] || CATEGORY_LABELS[cat]?.ko || cat}
                 </button>
               ))}
-            </div>
+            </div>}
 
             <div className="menu-grid">
               {filteredMenu.map((item) => (
