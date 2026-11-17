@@ -465,7 +465,7 @@ export default function App() {
               <h3>{t.menu[optionsFor.id]}</h3>
             </div>
             <img className="options-menu-photo" src={getMenuImageUrl(optionsFor)} alt={t.menu[optionsFor.id]} onError={(e) => { e.currentTarget.style.display = "none"; }} />
-            <p className="options-menu-detail">기본 가격 {optionsFor.price.toLocaleString()}원 · 옵션을 선택하면 가격이 바뀝니다.</p>
+            <p className="options-menu-detail">{{ko:`기본 가격 ${optionsFor.price.toLocaleString()}원 · 옵션을 선택하면 가격이 바뀝니다.`,en:`Base price: ₩${optionsFor.price.toLocaleString()}. Price changes with options.`,zh:`基础价格：₩${optionsFor.price.toLocaleString()}。选择选项后价格会变化。`,ja:`基本価格：₩${optionsFor.price.toLocaleString()}。オプションにより価格が変わります。`,vi:`Giá cơ bản: ₩${optionsFor.price.toLocaleString()}. Giá sẽ thay đổi theo tùy chọn.`}[kioskLang] || `기본 가격 ${optionsFor.price.toLocaleString()}원 · 옵션을 선택하면 가격이 바뀝니다.`)}</p>
 
             {isHotIceAvailable && (
               <div className="options-group">
@@ -584,9 +584,9 @@ export default function App() {
             <p className="order-number">{format(t.orderNumberLabel, { n: orderNumber })}</p>
             {orderDetails && (
               <div className="completed-order-details">
-                <p>이용 방법: {orderDetails.dineType === "dine-in" ? "매장 식사" : "포장"}</p>
-                <p>결제 방법: {orderDetails.paymentMethod === "card" ? "카드" : "현금"}</p>
-                <p>주문 금액: {orderDetails.totalPrice.toLocaleString()}원</p>
+                <p>{{ko:"이용 방법",en:"Order type",zh:"用餐方式",ja:"ご利用方法",vi:"Hình thức"}[kioskLang] || "이용 방법"}: {orderDetails.dineType === "dine-in" ? ({ko:"매장 식사",en:"Dine in",zh:"堂食",ja:"店内飲食",vi:"Dùng tại chỗ"}[kioskLang] || "매장 식사") : ({ko:"포장",en:"Takeout",zh:"外带",ja:"テイクアウト",vi:"Mang đi"}[kioskLang] || "포장")}</p>
+                <p>{{ko:"결제 방법",en:"Payment method",zh:"支付方式",ja:"お支払い方法",vi:"Phương thức thanh toán"}[kioskLang] || "결제 방법"}: {orderDetails.paymentMethod === "card" ? ({ko:"카드",en:"Card",zh:"银行卡",ja:"カード",vi:"Thẻ"}[kioskLang] || "카드") : ({ko:"현금",en:"Cash",zh:"现金",ja:"現金",vi:"Tiền mặt"}[kioskLang] || "현금")}</p>
+                <p>{{ko:"주문 금액",en:"Order total",zh:"订单金额",ja:"注文金額",vi:"Tổng đơn hàng"}[kioskLang] || "주문 금액"}: ₩{orderDetails.totalPrice.toLocaleString()}</p>
                 <ul>
                   {orderDetails.items.map((item) => (
                     <li key={item.cartId}>{t.menu[item.id]} × {item.qty}</li>
