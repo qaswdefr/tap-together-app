@@ -763,3 +763,77 @@ body {
   color: #000;
   border: 3px solid #fff;
 }
+
+
+/* 키오스크에서 직접 켜고 끄는 명암대비 모드 버튼 */
+.contrast-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  margin: 10px 0 22px 10px;
+  padding: 12px 22px;
+  border: 2px solid #111827;
+  border-radius: 14px;
+  background: #111827;
+  color: #ffffff;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.contrast-toggle:focus-visible {
+  outline: 4px solid #60a5fa;
+  outline-offset: 3px;
+}
+.kiosk.large .contrast-toggle {
+  font-size: 24px !important;
+  min-height: 64px;
+  padding: 16px 28px;
+}
+.kiosk.high-contrast .contrast-toggle {
+  background: #ffd400;
+  color: #000000;
+  border: 3px solid #ffffff;
+}
+.kiosk.high-contrast .menu-name,
+.kiosk.high-contrast .cart-item-options,
+.kiosk.high-contrast .cart-item-icon,
+.kiosk.high-contrast .total-price,
+.kiosk.high-contrast .options-menu-detail,
+.kiosk.high-contrast .options-group-label,
+.kiosk.high-contrast .options-header h3,
+.kiosk.high-contrast .options-price-row,
+.kiosk.high-contrast .dine-type-box,
+.kiosk.high-contrast .completed-order-details {
+  color: #ffffff;
+}
+.kiosk.high-contrast .options-box,
+.kiosk.high-contrast .dine-type-box {
+  background: #000000;
+  color: #ffffff;
+  border: 3px solid #ffffff;
+}
+.kiosk.high-contrast .option-choice,
+.kiosk.high-contrast .dine-type-btn {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+.kiosk.high-contrast .option-choice.selected,
+.kiosk.high-contrast .dine-type-btn:hover {
+  background: #ffd400;
+  color: #000000;
+  border-color: #ffd400;
+}
+.kiosk.high-contrast .menu-item:focus-visible,
+.kiosk.high-contrast .tab:focus-visible,
+.kiosk.high-contrast .checkout-btn:focus-visible,
+.kiosk.high-contrast .large-text-toggle:focus-visible,
+.kiosk.high-contrast .contrast-toggle:focus-visible {
+  outline: 4px solid #00e5ff;
+  outline-offset: 4px;
+}
+@media (max-width: 700px) {
+  .contrast-toggle { margin-left: 0; }
+}
