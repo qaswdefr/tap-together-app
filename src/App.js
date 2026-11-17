@@ -15,6 +15,14 @@ const LARGE_TEXT_LABELS = {
   vi: { on: "🔠 Bật chữ lớn", off: "🔠 Tắt chữ lớn" },
 };
 
+const HIGH_CONTRAST_LABELS = {
+  ko: { on: "◐ 명암대비 모드 켜기", off: "◐ 명암대비 모드 끄기" },
+  en: { on: "◐ Turn on high contrast", off: "◐ Turn off high contrast" },
+  zh: { on: "◐ 开启高对比度", off: "◐ 关闭高对比度" },
+  ja: { on: "◐ 高コントラストをオン", off: "◐ 高コントラストをオフ" },
+  vi: { on: "◐ Bật độ tương phản cao", off: "◐ Tắt độ tương phản cao" },
+};
+
 export default function App() {
   const {
     t,
@@ -22,6 +30,7 @@ export default function App() {
     largeText,
     setLargeText,
     highContrast,
+    setHighContrast,
     easyMode,
     kioskCode,
     kioskCodeRef,
@@ -155,6 +164,14 @@ export default function App() {
           onClick={() => setLargeText((current) => !current)}
         >
           {(LARGE_TEXT_LABELS[kioskLang] || LARGE_TEXT_LABELS.ko)[largeText ? "off" : "on"]}
+        </button>
+        <button
+          type="button"
+          className="contrast-toggle"
+          aria-pressed={highContrast}
+          onClick={() => setHighContrast((current) => !current)}
+        >
+          {(HIGH_CONTRAST_LABELS[kioskLang] || HIGH_CONTRAST_LABELS.ko)[highContrast ? "off" : "on"]}
         </button>
 
         {/* 원격/공유 참가자가 붙어 있는 동안엔 항상 켜져 있는 표시등 —
