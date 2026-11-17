@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { CATEGORIES, MENU, WHIP_AVAILABLE_IDS, FIXED_ICE_IDS, DEFAULT_OPTIONS, getQrImageUrl, getMenuImageUrl, computeUnitPrice, buildOptionSummary, format } from "./data/menu";
+import { CATEGORIES, CATEGORY_LABELS, MENU, FIXED_ICE_IDS, DEFAULT_OPTIONS, getQrImageUrl, getMenuImageUrl, computeUnitPrice, buildOptionSummary, format } from "./data/menu";
 import { useKioskConnection, socket } from "./hooks/useKioskConnection";
 import { useCart } from "./hooks/useCart";
 
@@ -10,6 +10,7 @@ const FALLBACK_LOADING_TEXT = "Loading...";
 export default function App() {
   const {
     t,
+    kioskLang,
     largeText,
     highContrast,
     easyMode,
@@ -44,7 +45,7 @@ export default function App() {
     declineRemoteCheckout,
   } = useCart({ t, notify, finishAndResetKiosk, kioskCodeRef });
 
-  const [activeCategory, setActiveCategory] = useState("coffee");
+  const [activeCategory, setActiveCategory] = useState("burger");
   const [optionsFor, setOptionsFor] = useState(null);
   const [draftOptions, setDraftOptions] = useState(DEFAULT_OPTIONS);
 
@@ -83,7 +84,7 @@ export default function App() {
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
-    notify(t.categories[cat]);
+    notify(CATEGORY_LABELS[cat]?.ko || cat);
   };
 
   const openOptions = (item) => {
@@ -131,7 +132,6 @@ export default function App() {
     );
   }
 
-  const isWhipAvailable = optionsFor ? WHIP_AVAILABLE_IDS.includes(optionsFor.id) : false;
   const isHotIceAvailable = optionsFor ? !FIXED_ICE_IDS.includes(optionsFor.id) : false;
 
   return (
@@ -183,7 +183,7 @@ export default function App() {
                   aria-pressed={activeCategory === cat}
                   onClick={() => handleCategoryClick(cat)}
                 >
-                  {t.categories[cat]}
+                  {CATEGORY_LABELS[cat]?.[kioskLang] || CATEGORY_LABELS[cat]?.ko || cat}
                 </button>
               ))}
             </div>
@@ -297,7 +297,7 @@ export default function App() {
               </div>
             )}
 
-            <div className="options-group">
+            {optionsFor.category === "drink" && (<div className="options-group">
               <p className="options-group-label">{t.sizeLabel}</p>
               <div className="options-choice-row">
                 <button
@@ -313,45 +313,12 @@ export default function App() {
                   {t.sizeLarge}
                 </button>
               </div>
-            </div>
+            </div>)}
 
-            <div className="options-group">
-              <p className="options-group-label">{t.toppingLabel}</p>
-              <div className="options-choice-row">
-                <button
-                  className={`option-choice ${draftOptions.topping === "none" ? "selected" : ""}`}
-                  onClick={() => { setDraftOptions((prev) => ({ ...prev, topping: "none" })); notify(t.toppingNone); }}
-                >
-                  {t.toppingNone}
-                </button>
-                <button
-                  className={`option-choice ${draftOptions.topping === "pearl" ? "selected" : ""}`}
-                  onClick={() => { setDraftOptions((prev) => ({ ...prev, topping: "pearl" })); notify(t.toppingPearl.replace(/\s*\(.*\)/, "")); }}
-                >
-                  {t.toppingPearl}
-                </button>
-              </div>
-            </div>
+            {/* 음료 외 카페식 토핑 옵션은 사용하지 않습니다. */}
+            
 
-            {isWhipAvailable && (
-              <div className="options-group">
-                <p className="options-group-label">{t.whipLabel}</p>
-                <div className="options-choice-row">
-                  <button
-                    className={`option-choice ${draftOptions.whip === "none" ? "selected" : ""}`}
-                    onClick={() => { setDraftOptions((prev) => ({ ...prev, whip: "none" })); notify(t.whipNone); }}
-                  >
-                    {t.whipNone}
-                  </button>
-                  <button
-                    className={`option-choice ${draftOptions.whip === "add" ? "selected" : ""}`}
-                    onClick={() => { setDraftOptions((prev) => ({ ...prev, whip: "add" })); notify(t.whipAdd.replace(/\s*\(.*\)/, "")); }}
-                  >
-                    {t.whipAdd}
-                  </button>
-                </div>
-              </div>
-            )}
+            
 
             <div className="options-price-row">
               <span>{computeUnitPrice(optionsFor, draftOptions).toLocaleString()}원</span>
