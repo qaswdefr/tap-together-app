@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { CATEGORIES, MENU, WHIP_AVAILABLE_IDS, FIXED_ICE_IDS, DEFAULT_OPTIONS, getQrImageUrl, getMenuImageUrl, computeUnitPrice, buildOptionSummary, format } from "./data/menu";
+import { CATEGORIES, CATEGORY_LABELS, MENU, WHIP_AVAILABLE_IDS, FIXED_ICE_IDS, DEFAULT_OPTIONS, getQrImageUrl, getMenuImageUrl, computeUnitPrice, buildOptionSummary, format } from "./data/menu";
 import { useKioskConnection, socket } from "./hooks/useKioskConnection";
 import { useCart } from "./hooks/useCart";
 
@@ -44,7 +44,7 @@ export default function App() {
     declineRemoteCheckout,
   } = useCart({ t, notify, finishAndResetKiosk, kioskCodeRef });
 
-  const [activeCategory, setActiveCategory] = useState("coffee");
+  const [activeCategory, setActiveCategory] = useState("burger");
   const [optionsFor, setOptionsFor] = useState(null);
   const [draftOptions, setDraftOptions] = useState(DEFAULT_OPTIONS);
 
@@ -183,7 +183,7 @@ export default function App() {
                   aria-pressed={activeCategory === cat}
                   onClick={() => handleCategoryClick(cat)}
                 >
-                  {t.categories[cat]}
+                  {CATEGORY_LABELS[cat]?.[kioskLang] || CATEGORY_LABELS[cat]?.ko || cat}
                 </button>
               ))}
             </div>
