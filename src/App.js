@@ -63,6 +63,12 @@ export default function App() {
     declineRemoteCheckout,
   } = useCart({ t, notify, finishAndResetKiosk, kioskCodeRef });
 
+  // 고대비 모드는 키오스크 영역뿐 아니라 페이지 바깥 여백(body)에도 적용
+  useEffect(() => {
+    document.documentElement.classList.toggle("high-contrast-mode", highContrast);
+    document.body.classList.toggle("high-contrast-mode", highContrast);
+  }, [highContrast]);
+
   const [activeCategory, setActiveCategory] = useState("burger");
   const [optionsFor, setOptionsFor] = useState(null);
   const [draftOptions, setDraftOptions] = useState(DEFAULT_OPTIONS);
