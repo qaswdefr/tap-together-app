@@ -15,6 +15,15 @@ const LARGE_TEXT_LABELS = {
   vi: { on: "🔠 Bật chữ lớn", off: "🔠 Tắt chữ lớn" },
 };
 
+const LANGUAGE_LABELS = {
+  ko: { title: "🌐 언어 선택", options: { ko: "한국어", en: "영어", zh: "중국어", ja: "일본어", vi: "베트남어" } },
+  en: { title: "🌐 Select language", options: { ko: "Korean", en: "English", zh: "Chinese", ja: "Japanese", vi: "Vietnamese" } },
+  zh: { title: "🌐 选择语言", options: { ko: "韩语", en: "英语", zh: "中文", ja: "日语", vi: "越南语" } },
+  ja: { title: "🌐 言語を選択", options: { ko: "韓国語", en: "英語", zh: "中国語", ja: "日本語", vi: "ベトナム語" } },
+  vi: { title: "🌐 Chọn ngôn ngữ", options: { ko: "Tiếng Hàn", en: "Tiếng Anh", zh: "Tiếng Trung", ja: "Tiếng Nhật", vi: "Tiếng Việt" } },
+};
+const LANGUAGE_OPTIONS = ["ko", "en", "zh", "ja", "vi"];
+
 const HIGH_CONTRAST_LABELS = {
   ko: { on: "◐ 명암대비 모드 켜기", off: "◐ 명암대비 모드 끄기" },
   en: { on: "◐ Turn on high contrast", off: "◐ Turn off high contrast" },
@@ -27,6 +36,7 @@ export default function App() {
   const {
     t,
     kioskLang,
+    setKioskLang,
     largeText,
     setLargeText,
     highContrast,
@@ -232,6 +242,15 @@ export default function App() {
             fontSize: "18px", fontWeight: 900, cursor: "pointer",
           }}>전체 메뉴</button>
         </form>
+        <section aria-label="언어 선택" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "12px", width: "100%", margin: "16px auto", padding: "14px", boxSizing: "border-box", border: "2px solid #64748b", borderRadius: "14px", background: highContrast ? "#000000" : "#f1f5f9" }}>
+          <label htmlFor="kiosk-language-select" style={{ fontSize: "20px", fontWeight: 900, color: highContrast ? "#ffffff" : "#111827" }}>
+            {(LANGUAGE_LABELS[kioskLang] || LANGUAGE_LABELS.ko).title}
+          </label>
+          <select id="kiosk-language-select" value={kioskLang} onChange={(e) => setKioskLang(e.target.value)} style={{ minHeight: "54px", minWidth: "190px", padding: "10px 16px", border: "3px solid #111827", borderRadius: "10px", background: "#ffffff", color: "#111827", fontSize: "19px", fontWeight: 800 }}>
+            {LANGUAGE_OPTIONS.map((lang) => <option key={lang} value={lang}>{(LANGUAGE_LABELS[kioskLang] || LANGUAGE_LABELS.ko).options[lang]}</option>)}
+          </select>
+        </section>
+
         <section
           aria-label="접근성 설정"
           style={{
