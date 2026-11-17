@@ -71,7 +71,7 @@ export default function App() {
     requestRemoteCheckout,
     approveRemoteCheckout,
     declineRemoteCheckout,
-  } = useCart({ t, notify, finishAndResetKiosk, kioskCodeRef });
+  } = useCart({ t, notify, finishAndResetKiosk, kioskCodeRef, kioskLang });
 
   // 고대비 모드는 키오스크 영역뿐 아니라 페이지 바깥 여백(body)에도 적용
   useEffect(() => {
@@ -127,6 +127,16 @@ export default function App() {
     }
     return item.category === activeCategory;
   });
+  const receiptLang = orderDetails?.language || kioskLang;
+  const receiptText = {
+    ko: { done: "결제 완료!", order: "주문번호 {n}", dine: "이용 방법", dineIn: "매장 식사", takeout: "포장", payment: "결제 방법", card: "카드", cash: "현금", total: "주문 금액" },
+    en: { done: "Payment complete!", order: "Order number {n}", dine: "Order type", dineIn: "Dine in", takeout: "Takeout", payment: "Payment method", card: "Card", cash: "Cash", total: "Order total" },
+    zh: { done: "付款完成！", order: "订单号 {n}", dine: "用餐方式", dineIn: "堂食", takeout: "外带", payment: "支付方式", card: "银行卡", cash: "现金", total: "订单金额" },
+    ja: { done: "お支払い完了！", order: "注文番号 {n}", dine: "ご利用方法", dineIn: "店内飲食", takeout: "テイクアウト", payment: "お支払い方法", card: "カード", cash: "現金", total: "注文金額" },
+    vi: { done: "Thanh toán thành công!", order: "Số đơn hàng {n}", dine: "Hình thức", dineIn: "Dùng tại chỗ", takeout: "Mang đi", payment: "Phương thức thanh toán", card: "Thẻ", cash: "Tiền mặt", total: "Tổng đơn hàng" },
+  }[receiptLang] || {
+    done: "결제 완료!", order: "주문번호 {n}", dine: "이용 방법", dineIn: "매장 식사", takeout: "포장", payment: "결제 방법", card: "카드", cash: "현금", total: "주문 금액"
+  };
   const searchResultText = {
     ko: filteredMenu.length ? `${filteredMenu.length}개의 메뉴를 찾았습니다. 메뉴를 누르면 옵션을 고르고 장바구니에 담을 수 있습니다.` : "검색 결과가 없습니다. 메뉴 이름을 다시 확인해 주세요.",
     en: filteredMenu.length ? `${filteredMenu.length} menu(s) found. Select a menu to choose options and add it to your cart.` : "No results found. Please check the menu name and try again.",
@@ -580,17 +590,18 @@ export default function App() {
         <div className="payment-overlay">
           <div className="payment-box success" role="alert" aria-live="assertive">
             <span className="check-icon" aria-hidden="true">✅</span>
-            <p className="success-title">{t.doneLabel}</p>
-            <p className="order-number">{format(t.orderNumberLabel, { n: orderNumber })}</p>
+            <p className="success-title">{receiptText.done}</p>
+            <p className="order-number">{receiptText.order.replace("{n}", orderNumber)}</p>
             {orderDetails && (
               <div className="completed-order-details">
-                <p>{{ko:"이용 방법",en:"Order type",zh:"用餐方式",ja:"ご利用方法",vi:"Hình thức"}[kioskLang] || "이용 방법"}: {orderDetails.dineType === "dine-in" ? ({ko:"매장 식사",en:"Dine in",zh:"堂食",ja:"店内飲食",vi:"Dùng tại chỗ"}[kioskLang] || "매장 식사") : ({ko:"포장",en:"Takeout",zh:"外带",ja:"テイクアウト",vi:"Mang đi"}[kioskLang] || "포장")}</p>
-                <p>{{ko:"결제 방법",en:"Payment method",zh:"支付方式",ja:"お支払い方法",vi:"Phương thức thanh toán"}[kioskLang] || "결제 방법"}: {orderDetails.paymentMethod === "card" ? ({ko:"카드",en:"Card",zh:"银行卡",ja:"カード",vi:"Thẻ"}[kioskLang] || "카드") : ({ko:"현금",en:"Cash",zh:"现金",ja:"現金",vi:"Tiền mặt"}[kioskLang] || "현금")}</p>
-                <p>{{ko:"주문 금액",en:"Order total",zh:"订单金额",ja:"注文金額",vi:"Tổng đơn hàng"}[kioskLang] || "주문 금액"}: ₩{orderDetails.totalPrice.toLocaleString()}</p>
+                <p>{receiptText.dine}: {orderDetails.dineType === "dine-in" ? receiptText.dineIn : receiptText.takeout}</p>
+                <p>{receiptText.payment}: {orderDetails.paymentMethod === "card" ? receiptText.card : receiptText.cash}</p>
+                <p>{receiptText.total}: ₩{orderDetails.totalPrice.toLocaleString()}</p>
                 <ul>
-                  {orderDetails.items.map((item) => (
-                    <li key={item.cartId}>{t.menu[item.id]} × {item.qty}</li>
-                  ))}
+                  {orderDetails.items.map((item) => {
+                    const menuItem = MENU.find((menu) => menu.id === item.id);
+                    return <li key={item.cartId}>{menuItem?.names?.[receiptLang] || menuItem?.names?.ko || item.id} × {item.qty}</li>;
+                  })}
                 </ul>
               </div>
             )}
