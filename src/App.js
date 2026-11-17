@@ -179,7 +179,7 @@ export default function App() {
   return (
     <div className={`kiosk ${largeText ? "large" : ""} ${highContrast ? "high-contrast" : ""}`}>
       <div className="kiosk-card wide">
-        <h1>{t.kioskTitle}</h1>
+        <h1>{{ ko: "버거킹 키오스크", en: "Burger King Kiosk", zh: "汉堡王自助点餐机", ja: "バーガーキングのキオスク", vi: "Ki-ốt Burger King" }[kioskLang] || "버거킹 키오스크"}</h1>
         <p className="subtitle">{t.subtitle}</p>
         <form
           role="search"
