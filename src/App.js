@@ -171,6 +171,88 @@ export default function App() {
       <div className="kiosk-card wide">
         <h1>{t.kioskTitle}</h1>
         <p className="subtitle">{t.subtitle}</p>
+        <form
+          role="search"
+          aria-label="메뉴 검색"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const results = document.getElementById("menu-search-results");
+            if (results) results.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: "10px",
+            width: "100%",
+            margin: "18px 0 22px",
+            padding: "16px",
+            boxSizing: "border-box",
+            border: "3px solid #c98a4b",
+            borderRadius: "14px",
+            background: "#fff7ed",
+          }}
+        >
+          <label htmlFor="menu-search-input" style={{ width: "100%", color: "#111827", fontSize: "20px", fontWeight: 900 }}>
+            🔎 메뉴 이름 검색
+          </label>
+          <input
+            id="menu-search-input"
+            type="search"
+            value={menuSearch}
+            onChange={(e) => setMenuSearch(e.target.value)}
+            placeholder="예: 와퍼, 불고기버거, 콜라"
+            autoComplete="off"
+            style={{
+              flex: "1 1 220px",
+              minWidth: 0,
+              minHeight: "56px",
+              padding: "12px 16px",
+              border: "2px solid #374151",
+              borderRadius: "10px",
+              background: "#ffffff",
+              color: "#111827",
+              fontSize: "18px",
+              fontWeight: 700,
+              boxSizing: "border-box",
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              flex: "0 0 auto",
+              minHeight: "56px",
+              padding: "12px 28px",
+              border: "2px solid #111827",
+              borderRadius: "10px",
+              background: "#111827",
+              color: "#ffffff",
+              fontSize: "18px",
+              fontWeight: 900,
+              cursor: "pointer",
+            }}
+          >
+            검색
+          </button>
+          <button
+            type="button"
+            onClick={() => setMenuSearch("")}
+            style={{
+              flex: "0 0 auto",
+              minHeight: "56px",
+              padding: "12px 20px",
+              border: "2px solid #374151",
+              borderRadius: "10px",
+              background: "#ffffff",
+              color: "#111827",
+              fontSize: "16px",
+              fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >
+            전체 메뉴
+          </button>
+        </form>
         <section
           aria-label="접근성 설정"
           style={{
@@ -272,12 +354,7 @@ export default function App() {
 
         <div className="layout">
           <div className="menu-section">
-            <div className="menu-search" style={{ display: "flex", gap: "10px", alignItems: "center", margin: "0 0 16px", width: "100%" }}>
-              <label htmlFor="menu-search-input" style={{ fontWeight: 800, whiteSpace: "nowrap" }}>메뉴 검색</label>
-              <input id="menu-search-input" type="search" value={menuSearch} onChange={(e) => setMenuSearch(e.target.value)} placeholder="메뉴 이름을 입력하세요" autoComplete="off" style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: "10px 14px", border: "2px solid #64748b", borderRadius: "10px", fontSize: "16px", boxSizing: "border-box" }} />
-              {menuSearch && <button type="button" onClick={() => setMenuSearch("")} aria-label="검색어 지우기" style={{ minHeight: "48px", padding: "8px 14px", borderRadius: "10px", border: "2px solid #64748b", background: "#fff", color: "#111827", fontWeight: 700 }}>지우기</button>}
-            </div>
-            {normalizedSearch && <p role="status" style={{ margin: "0 0 12px", fontWeight: 700 }}>{filteredMenu.length ? filteredMenu.length + "개의 메뉴를 찾았습니다. 메뉴를 누르면 옵션을 고르고 장바구니에 담을 수 있습니다." : "검색 결과가 없습니다. 메뉴 이름을 다시 확인해 주세요."}</p>}
+{normalizedSearch && <p id="menu-search-results" role="status" style={{ margin: "0 0 12px", padding: "12px", borderRadius: "10px", background: "#fff7ed", color: "#111827", fontWeight: 800 }}>{filteredMenu.length ? filteredMenu.length + "개의 메뉴를 찾았습니다. 메뉴를 누르면 옵션을 고르고 장바구니에 담을 수 있습니다." : "검색 결과가 없습니다. 메뉴 이름을 다시 확인해 주세요."}</p>}
             {!normalizedSearch && <div className="tabs">
               {CATEGORIES.map((cat) => (
                 <button
