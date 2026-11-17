@@ -180,78 +180,57 @@ export default function App() {
             if (results) results.scrollIntoView({ behavior: "smooth", block: "start" });
           }}
           style={{
+            position: "sticky",
+            top: "8px",
+            zIndex: 100,
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",
             gap: "10px",
             width: "100%",
-            margin: "18px 0 22px",
+            margin: "12px 0 22px",
             padding: "16px",
             boxSizing: "border-box",
-            border: "3px solid #c98a4b",
+            border: "4px solid #b45309",
             borderRadius: "14px",
             background: "#fff7ed",
+            boxShadow: "0 4px 18px rgba(0,0,0,.35)",
           }}
         >
-          <label htmlFor="menu-search-input" style={{ width: "100%", color: "#111827", fontSize: "20px", fontWeight: 900 }}>
-            🔎 메뉴 이름 검색
+          <label htmlFor="menu-search-input" style={{ width: "100%", color: "#111827", fontSize: "22px", fontWeight: 900 }}>
+            🔎 메뉴 검색 — 메뉴 이름을 입력하세요
           </label>
           <input
             id="menu-search-input"
             type="search"
             value={menuSearch}
             onChange={(e) => setMenuSearch(e.target.value)}
-            placeholder="예: 와퍼, 불고기버거, 콜라"
+            placeholder="와퍼, 불고기버거, 콜라 등"
             autoComplete="off"
             style={{
               flex: "1 1 220px",
               minWidth: 0,
-              minHeight: "56px",
+              minHeight: "62px",
               padding: "12px 16px",
-              border: "2px solid #374151",
+              border: "3px solid #111827",
               borderRadius: "10px",
               background: "#ffffff",
               color: "#111827",
-              fontSize: "18px",
-              fontWeight: 700,
+              fontSize: "20px",
+              fontWeight: 800,
               boxSizing: "border-box",
             }}
           />
-          <button
-            type="submit"
-            style={{
-              flex: "0 0 auto",
-              minHeight: "56px",
-              padding: "12px 28px",
-              border: "2px solid #111827",
-              borderRadius: "10px",
-              background: "#111827",
-              color: "#ffffff",
-              fontSize: "18px",
-              fontWeight: 900,
-              cursor: "pointer",
-            }}
-          >
-            검색
-          </button>
-          <button
-            type="button"
-            onClick={() => setMenuSearch("")}
-            style={{
-              flex: "0 0 auto",
-              minHeight: "56px",
-              padding: "12px 20px",
-              border: "2px solid #374151",
-              borderRadius: "10px",
-              background: "#ffffff",
-              color: "#111827",
-              fontSize: "16px",
-              fontWeight: 800,
-              cursor: "pointer",
-            }}
-          >
-            전체 메뉴
-          </button>
+          <button type="submit" style={{
+            minHeight: "62px", padding: "12px 28px", border: "3px solid #111827",
+            borderRadius: "10px", background: "#111827", color: "#ffffff",
+            fontSize: "20px", fontWeight: 900, cursor: "pointer",
+          }}>검색</button>
+          <button type="button" onClick={() => setMenuSearch("")} style={{
+            minHeight: "62px", padding: "12px 20px", border: "3px solid #374151",
+            borderRadius: "10px", background: "#ffffff", color: "#111827",
+            fontSize: "18px", fontWeight: 900, cursor: "pointer",
+          }}>전체 메뉴</button>
         </form>
         <section
           aria-label="접근성 설정"
