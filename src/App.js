@@ -7,11 +7,20 @@ import { useCart } from "./hooks/useCart";
 const REMOTE_SITE_URL = process.env.REACT_APP_REMOTE_SITE_URL || "http://localhost:3000";
 const FALLBACK_LOADING_TEXT = "Loading...";
 
+const LARGE_TEXT_LABELS = {
+  ko: { on: "🔠 큰 글씨 켜기", off: "🔠 큰 글씨 끄기" },
+  en: { on: "🔠 Turn on large text", off: "🔠 Turn off large text" },
+  zh: { on: "🔠 开启大字体", off: "🔠 关闭大字体" },
+  ja: { on: "🔠 大きな文字をオン", off: "🔠 大きな文字をオフ" },
+  vi: { on: "🔠 Bật chữ lớn", off: "🔠 Tắt chữ lớn" },
+};
+
 export default function App() {
   const {
     t,
     kioskLang,
     largeText,
+    setLargeText,
     highContrast,
     easyMode,
     kioskCode,
@@ -139,6 +148,14 @@ export default function App() {
       <div className="kiosk-card wide">
         <h1>{t.kioskTitle}</h1>
         <p className="subtitle">{t.subtitle}</p>
+        <button
+          type="button"
+          className="large-text-toggle"
+          aria-pressed={largeText}
+          onClick={() => setLargeText((current) => !current)}
+        >
+          {(LARGE_TEXT_LABELS[kioskLang] || LARGE_TEXT_LABELS.ko)[largeText ? "off" : "on"]}
+        </button>
 
         {/* 원격/공유 참가자가 붙어 있는 동안엔 항상 켜져 있는 표시등 —
             악용(누군가 몰래 연결) 방지를 위해 연결 여부를 화면에서 계속 알 수 있게 함.
